@@ -2,6 +2,7 @@
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -151,13 +152,32 @@ public class MyTestCases extends myData {
 	@Test(priority = 4)
 	
 	public void AddItemToTheCart() {
-		driver.navigate().to(myWebSite);
 		
-		List<WebElement> AllItems = driver.findElements(By.className("prdocutname"));
-		
-		int RandomIndexForTheItem = rand.nextInt(AllItems.size());
+		 driver.navigate().to(myWebSite);
+		    Random rand = new Random();
 
-		AllItems.get(RandomIndexForTheItem).click();
+
+		    for (int i = 0; i < 10; i++) { // max 10 attempts here we can increase momkin 16 
+		        // pick a random item and open it
+		        List<WebElement> items = driver.findElements(By.className("prdocutname"));
+		        int randomItem = rand.nextInt(items.size());
+		        items.get(randomItem).click();
+
+		        // check availability
+		        boolean outOfStock = driver.getPageSource().contains("Out of Stock"); // true
+		        boolean blockedProduct = driver.getCurrentUrl().contains("product_id=116");//false
+
+		        if (!outOfStock && !blockedProduct) {
+		            driver.findElement(By.cssSelector(".cart")).click();
+		            System.out.println("Added to cart: " + driver.getCurrentUrl());
+		            return; // success
+		        }
+
+		        driver.navigate().back(); // try again
+		    }
+
+		    throw new RuntimeException("No in-stock item found after 10 attempts.");
+		
 		
 		
 		// LOGIC ONE هاد في حال كان في item out of stock
@@ -171,27 +191,18 @@ public class MyTestCases extends myData {
 		
 		// LOGIC TWO  هاد في حال كان في item out of stock
 		
-		if (driver.getPageSource().contains("Out of Stock") ||driver.getCurrentUrl().contains("product_id=116")){
-			
-			driver.navigate().back();
-			
-			List<WebElement> AlternativeItems = driver.findElements(By.className("prdocutname"));
-			int AlternativeItem = rand.nextInt(AlternativeItems.size());
-
-			
-			AlternativeItems.get(AlternativeItem).click();
-			
-		}
-		
-//		int a = 5 ;
-//		while(a==5) {
-//			System.out.println("yes");
+//		if (driver.getPageSource().contains("Out of Stock") ||driver.getCurrentUrl().contains("product_id=116")){
+//			
+//			driver.navigate().back();
+//			
+//			List<WebElement> AlternativeItems = driver.findElements(By.className("prdocutname"));
+//			int AlternativeItem = rand.nextInt(AlternativeItems.size());
+//
+//			
+//			AlternativeItems.get(AlternativeItem).click();
+//			
 //		}
-//		
-		
-		WebElement AddToCartButton = driver.findElement(By.cssSelector(".cart"));
-		
-		AddToCartButton.click();
+	
 		
 	}
   
