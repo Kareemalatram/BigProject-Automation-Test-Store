@@ -3,13 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Automation.MyTestCases">
+      <class name="automationExercise.MyPage">
         <methods>
-          <include name="mySetup"/>
-          <include name="AfterMyTest"/>
-          <include name="Login"/>
+          <include name="mySetUp"/>
+          <include name="AddItemToCart"/>
         </methods>
-      </class> <!-- Automation.MyTestCases -->
+      </class> <!-- automationExercise.MyPage -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
